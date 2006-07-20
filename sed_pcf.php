@@ -1,7 +1,7 @@
 <?php
 
 $plugin['name'] = 'sed_packed_custom_fields';
-$plugin['version'] = '0.1';
+$plugin['version'] = '0.2';
 $plugin['author'] = 'Stephen Dickinson';
 $plugin['author_uri'] = 'txp-plugins.netcarving.com';
 $plugin['description'] = 'Allows packing of multiple values into one custom field.';
@@ -32,7 +32,7 @@ div#sed_help h3 { color: #693; font: bold 12px Arial, sans-serif; letter-spacing
 
 h1(#manual). PCF(Packed Custom Fields)
 
-sed_pcf plugin, v0.1 (June 8th, 2006)
+sed_pcf plugin, v0.2 (June 11th, 2006)
 
 This little plugin allows you to use an article's custom fields to store multiple, named, values. The packing must follow "a specific format":#format. The tag list includes tags to test for a value in the field and to access a value from a field.
 
@@ -40,8 +40,11 @@ h2(#tags). Tag Directory
 
 |_. Tag    |_. Description  |
 | "<code>sed_pcf_get_value</code>":#get | Returns the named value from the named section of the named custom field. |
-| "<code>sed_pcf_if_value</code>":#if | Tests for the existence of a named value in a named section of a cusom field. |
+| "<code>sed_pcf_if_value</code>":#if | Tests for the existence of a named value in a named section of a custom field. |
+| "<code>sed_pcf_if_field_section</code>":#ifsection | Tests for the existence of a named section of a custom field. |
 | "<code>sed_pcf_email</code>":#email | Uses the values in a named section of a custom field to call the TXP email tag. |
+| "<code>sed_pcf_image</code>":#image | Uses the values in a named section of a custom field to call the TXP image tag. |
+| "<code>sed_pcf_thumbnail</code>":#thumb | Uses the values in a named section of a custom field to call the TXP thumbnail tag. |
 
 h2(#get). The @sed_pcf_get_value@ tag
 
@@ -49,7 +52,7 @@ This tag can take the following attributes&#8230;
 
 |_. Attribute    |_. Default Value |_. Status   |_. Description |
 | 'custom'       | ''          | Needed   | Name of the custom field to access. |
-| 'section'      | ''          | Needed   | Name of the section within the field to access. |
+| *'section'*    | *''*        | *Needed* | Name of the section within the field to access.<br/>*If you are using the simple packing format then set this to 'none'.* |
 | 'variable'     | ''          | Needed   | Name of the variable within the section. |
 | 'default'      | NULL        | Optional | The value to return if the access fails. |
 
@@ -58,28 +61,83 @@ This tag can take the following attributes&#8230;
 
 h2(#if). The @sed_pcf_if_value@ tag
 
-The attributes are as above EXCEPT that there is no default value used. If the value is present then the contents of the contained tag will be evaluated. If there is an @else@ section then that will be evaluated if the value is not present.
+|_. Attribute    |_. Default Value |_. Status   |_. Description |
+| 'custom'       | ''          | Needed   | Name of the custom field to access. |
+| *'section'*    | *''*        | *Needed* | Name of the section within the field to access.<br/>*If you are using the simple packing format then set this to 'none'.* |
+| 'variable'     | ''          | Needed   | Name of the variable within the section. |
+| *'val'*        | *NULL*     | *Optional* | *If specified, this value will be checked against the named variable from the named section of the named custom field.* |
+
+If the value is present and equal to a suppled @val@ then the contents of the contained tag will be evaluated. If there is an @else@ section then that will be evaluated if the value is not present or if it is present and fails to match the @val@ attribute.
+
+h2(#ifsection). The @sed_pcf_if_field_section@ tag
+
+|_. Attribute    |_. Default Value |_. Status   |_. Description |
+| 'custom'       | ''          | Needed   | Name of the custom field to access. |
+| 'section'      | ''          | Needed   | Name of the section of the packed field to test for. |
+
+If the named section exists within the named custom field then the enclosed part of the tag is parsed. 
 
 h2(#email). The @sed_pcf_email@ tag
 
 |_. Attribute    |_. Default Value |_. Status   |_. Description |
 | 'custom'       | ''          | Needed   | Name of the custom field to access. |
-| 'section'      | 'email'     | Optional | Name of the section within the field to grab the values to pass to the TXP @email@ tag. |
+| *'section'*    | *'email'*   | *Optional* | Name of the section within the field to grab the values to pass to the TXP @email@ tag.<br/>*If you are using the simple packing format then set this to 'none'.* |
 | 'default'      | NULL        | Optional | The value to return if the access fails. |
+| 'parse'        | false       | Optional | Set this to true to force a the contents of the packed field to be parsed before being used to call the TXP email function. This means that it is possible to use *attributeless* tags (such as @<txp:s/>@ as arguments to the email call. |
 
 Allows you to setup email links on a per-article basis. You need to setup the custom field you are going to stash the email values in. Then add this to the article body or article form @<txp:sed_pcf_email custom='my_field_name'/>@. Replace the 'my_field_name' as needed.
 
 Next, in the custom field itself, make sure you have @email(email='a@b.c';linktext='foo';title='bar')@. Replacing the values as you need.
 
+h2(#image). The @sed_pcf_image@ tag
+
+|_. Attribute    |_. Default Value |_. Status   |_. Description |
+| 'custom'       | ''          | Needed   | Name of the custom field to access. |
+| *'section'*    | *'image'*   | *Optional* | Name of the section within the field to grab the values to pass to the TXP @image@ tag.<br/>*If you are using the simple packing format then set this to 'none'.* |
+| 'default'      | NULL        | Optional | The value to return if the access fails. |
+
+Allows you to display an image based upon the contents of a section of a packed custom field. If you want to use a second layer of tags then that is possible providing they are attributeless tags such as @<txp:author/>@ or @<txp:s/>@.
+
+h2(#thumb). The @sed_pcf_thumbnail@ tag
+
+|_. Attribute    |_. Default Value |_. Status   |_. Description |
+| 'custom'       | ''          | Needed   | Name of the custom field to access. |
+| *'section'*    | *'thumbnail'*   | *Optional* | Name of the section within the field to grab the values to pass to the TXP @thumbnail@ tag.<br/>*If you are using the simple packing format then set this to 'none'.* |
+| 'default'      | NULL        | Optional | The value to return if the access fails. |
+
+As for images, so with thumbnails!
+
 h2(#format). Field Format
+
+There are two formats you can use. A simple and a normal format.
+
+h3(#simple). Simple Format
+
+This is a list of name='value' pairs, separated with ';' characters. Some examples of valid formats would be...
+
+* a='1'
+* a='1';b='2'
+* name='Steve';website='http://txp-plugins.netcarving.com'
+
+If you want to use the simple format then set the section name to 'none' when you call the tags.
+
+h3(#complete). Normal Format
+
+This allows you to pack mutliple sets of the simple-format lists into one field. Each list is called a section and sections can be named, and separated with the '|' character.
 
 Some examples of valid fields...
 * section1(a='1';b='2')|section2(c='Hello!';d='';e='Goodbye!')
 * copyright(start='1945';owner='Ritchard the great')|email(email='john@nowhere.splat';linktext='link text';title='Click here to send a message')
 
-Sections are separated with a '|', the variable list for a section is within brakets and the variables are separated with ';'. Each variable forms a name='value' pair.
-
 h2. Version History.
+
+v0.2 Implemented the following features&#8230;
+
+* Added the simple field format
+* Added value checking to the @sed_pcf_if_value@ tag
+* Added the @sed_pcf_if_field_section@ tag
+* Added tags to display thumbnails and images from packed custom fields
+* Added parsing of embedded values to allow the use of attributeless tags as arguments to the image, thumbnail and email tags.
 
 v0.1 Implemented the following features&#8230;
 
@@ -100,6 +158,60 @@ v0.1 Implemented the following features&#8230;
 //
 @require_plugin('sed_plugin_library');
 
+// ================== PRIVATE FUNCTIONS FOLLOW ===================
+
+function _sed_parse_section_vars( $vars ) {
+	$result = array();
+	
+	if( is_array($vars) and count($vars) ) {
+		foreach( $vars as $k=>$v )
+			$result[$k] = parse($v);
+		}
+
+	return $result;
+	}
+	
+function _sed_pcf_txp_fn($atts) {
+	//
+	//	Generic callback switch. Takes the array it builds from the named section of a custom field and calls a function with the
+	// array as an argument. Useful for calling back into the TXP core.
+	//
+	global $thisarticle;
+	$permitted = array( 'email', 'image', 'thumbnail' );
+
+	extract(lAtts(array(
+		'txp_fn'	=> '',
+		'custom'	=> '',
+		'section'	=> '',
+		'parse'		=> true,
+		'default'	=> '',
+	),$atts));	
+
+	if( !empty($txp_fn) and empty($section) )
+		$section = $txp_fn;
+
+	$result = $default;
+	$vars = @$thisarticle[$custom];
+	if	( 
+		!empty($txp_fn) and 
+		in_array($txp_fn, $permitted) and
+		function_exists($txp_fn) and 
+		!empty($vars) and 
+		!empty($section) 
+		) {
+		if( 'none' === $section )
+			$vars = _extract_name_value_pairs( $vars );
+		else
+			$vars = _extract_packed_variable_section( $section , $vars );
+		if( is_array( $vars ) ) {
+			if( $parse ) 
+				$vars = _sed_parse_section_vars( $vars );
+			$result = @$txp_fn( $vars );
+			}
+		}
+	return $result;
+	}
+	
 // ================== CLIENT-SIDE TAGS FOLLOW ===================
 
 function sed_pcf_get_value( $atts ) {
@@ -118,7 +230,10 @@ function sed_pcf_get_value( $atts ) {
 	$result = $default;
 	$vars = @$thisarticle[$custom];
 	if( !empty( $vars ) and !empty($section) and !empty($variable) ) {
-		$vars = _extract_packed_variable_section( $section , $vars );
+		if( 'none' === $section )
+			$vars = _extract_name_value_pairs( $vars );
+		else
+			$vars = _extract_packed_variable_section( $section , $vars );
 		if( is_array( $vars ) ) {
 			$result = @$vars[$variable];
 			}
@@ -130,31 +245,54 @@ function sed_pcf_if_value( $atts , $thing='' ) {
 	//
 	//	Tests to see if there is a value to the named variable in the named section of the named custom field.
 	//
-	$val = sed_pcf_get_value( $atts );
-	return parse(EvalElse($thing, (isset($val) and !empty($val)) ));
+	extract(lAtts(array(
+		'val' => NULL,
+	),$atts));
+
+	$value = sed_pcf_get_value( $atts );
+
+	if( $val !== NULL )
+		$cond = (@$value == $val);
+	else
+		$cond = (isset($value) and !empty($value));
+
+	return parse(EvalElse($thing, $cond));
 	}
 
-function sed_pcf_email( $atts ) {
+function sed_pcf_if_field_section( $atts , $thing='' ) {
 	//
-	//	This extracts values from a named section of a custom field any outputs an email link.
+	//	Tests to see if there is a named section of the named custom field.
 	//
 	global $thisarticle;
 
 	extract(lAtts(array(
 		'custom'	=> '',
-		'section'	=> 'email', 
-		'default'	=> '',
+		'section'	=> '', 
 	),$atts));	
 
-	$result = $default;
+	$cond = false;
 	$vars = @$thisarticle[$custom];
 	if( !empty( $vars ) and !empty($section) ) {
 		$vars = _extract_packed_variable_section( $section , $vars );
-		if( is_array( $vars ) ) {
-			$result = email ( $vars );
-			}
+		$cond = is_array( $vars );
 		}
-	return $result;
+
+	return parse(EvalElse($thing, $cond));
+	}
+
+function sed_pcf_image( $atts ) {
+	$atts['txp_fn'] = 'image';
+	return _sed_pcf_txp_fn( $atts );
+	}
+
+function sed_pcf_thumbnail( $atts ) {
+	$atts['txp_fn'] = 'thumbnail';
+	return _sed_pcf_txp_fn( $atts );
+	}
+	
+function sed_pcf_email( $atts ) {
+	$atts['txp_fn'] = 'email';
+	return _sed_pcf_txp_fn( $atts );
 	}
 
 # --- END PLUGIN CODE ---
