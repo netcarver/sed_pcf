@@ -1,7 +1,11 @@
 <?php
+/*
+$HeadURL$
+$LastChangedRevision$
+*/
 
 $plugin['name'] = 'sed_packed_custom_fields';
-$plugin['version'] = '0.2';
+$plugin['version'] = '0.3';
 $plugin['author'] = 'Stephen Dickinson';
 $plugin['author_uri'] = 'http://txp-plugins.netcarving.com';
 $plugin['description'] = 'Allows packing of multiple values into one custom field.';
@@ -200,9 +204,9 @@ function _sed_pcf_txp_fn($atts) {
 		!empty($section) 
 		) {
 		if( 'none' === $section )
-			$vars = _extract_name_value_pairs( $vars );
+			$vars = sed_lib_extract_name_value_pairs( $vars );
 		else
-			$vars = _extract_packed_variable_section( $section , $vars );
+			$vars = sed_lib_extract_packed_variable_section( $section , $vars );
 		if( is_array( $vars ) ) {
 			if( $parse ) 
 				$vars = _sed_parse_section_vars( $vars );
@@ -231,9 +235,9 @@ function sed_pcf_get_value( $atts ) {
 	$vars = @$thisarticle[$custom];
 	if( !empty( $vars ) and !empty($section) and !empty($variable) ) {
 		if( 'none' === $section )
-			$vars = _extract_name_value_pairs( $vars );
+			$vars = sed_lib_extract_name_value_pairs( $vars );
 		else
-			$vars = _extract_packed_variable_section( $section , $vars );
+			$vars = sed_lib_extract_packed_variable_section( $section , $vars );
 		if( is_array( $vars ) ) {
 			$result = @$vars[$variable];
 			}
@@ -246,6 +250,9 @@ function sed_pcf_if_value( $atts , $thing='' ) {
 	//	Tests to see if there is a value to the named variable in the named section of the named custom field.
 	//
 	extract(lAtts(array(
+		'custom'	=> '',
+		'section'	=> '', 
+		'variable'  => '',
 		'val' => NULL,
 	),$atts));
 
@@ -273,7 +280,7 @@ function sed_pcf_if_field_section( $atts , $thing='' ) {
 	$cond = false;
 	$vars = @$thisarticle[$custom];
 	if( !empty( $vars ) and !empty($section) ) {
-		$vars = _extract_packed_variable_section( $section , $vars );
+		$vars = sed_lib_extract_packed_variable_section( $section , $vars );
 		$cond = is_array( $vars );
 		}
 
