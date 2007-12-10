@@ -6,7 +6,7 @@ $LastChangedRevision$
 
 $plugin['name'] = 'sed_packed_custom_fields';
 $plugin['version'] = '0.3';
-$plugin['author'] = 'Stephen Dickinson';
+$plugin['author'] = 'Netcarver';
 $plugin['author_uri'] = 'http://txp-plugins.netcarving.com';
 $plugin['description'] = 'Allows packing of multiple values into one custom field.';
 
@@ -16,7 +16,7 @@ $plugin['type'] = 1; // 0 = regular plugin; public only, 1 = admin plugin; publi
 
 if (0) {
 ?>
-<!-- CSS 
+<!-- CSS
 # --- BEGIN PLUGIN CSS ---
 <style type="text/css">
 div#sed_help td { vertical-align:top; }
@@ -79,7 +79,7 @@ h2(#ifsection). The @sed_pcf_if_field_section@ tag
 | 'custom'       | ''          | Needed   | Name of the custom field to access. |
 | 'section'      | ''          | Needed   | Name of the section of the packed field to test for. |
 
-If the named section exists within the named custom field then the enclosed part of the tag is parsed. 
+If the named section exists within the named custom field then the enclosed part of the tag is parsed.
 
 h2(#email). The @sed_pcf_email@ tag
 
@@ -166,7 +166,7 @@ v0.1 Implemented the following features&#8230;
 
 function _sed_parse_section_vars( $vars ) {
 	$result = array();
-	
+
 	if( is_array($vars) and count($vars) ) {
 		foreach( $vars as $k=>$v )
 			$result[$k] = parse($v);
@@ -174,7 +174,7 @@ function _sed_parse_section_vars( $vars ) {
 
 	return $result;
 	}
-	
+
 function _sed_pcf_txp_fn($atts) {
 	//
 	//	Generic callback switch. Takes the array it builds from the named section of a custom field and calls a function with the
@@ -189,33 +189,33 @@ function _sed_pcf_txp_fn($atts) {
 		'section'	=> '',
 		'parse'		=> true,
 		'default'	=> '',
-	),$atts));	
+	),$atts));
 
 	if( !empty($txp_fn) and empty($section) )
 		$section = $txp_fn;
 
 	$result = $default;
 	$vars = @$thisarticle[$custom];
-	if	( 
-		!empty($txp_fn) and 
+	if	(
+		!empty($txp_fn) and
 		in_array($txp_fn, $permitted) and
-		function_exists($txp_fn) and 
-		!empty($vars) and 
-		!empty($section) 
+		function_exists($txp_fn) and
+		!empty($vars) and
+		!empty($section)
 		) {
 		if( 'none' === $section )
 			$vars = sed_lib_extract_name_value_pairs( $vars );
 		else
 			$vars = sed_lib_extract_packed_variable_section( $section , $vars );
 		if( is_array( $vars ) ) {
-			if( $parse ) 
+			if( $parse )
 				$vars = _sed_parse_section_vars( $vars );
 			$result = @$txp_fn( $vars );
 			}
 		}
 	return $result;
 	}
-	
+
 // ================== CLIENT-SIDE TAGS FOLLOW ===================
 
 function sed_pcf_get_value( $atts ) {
@@ -226,10 +226,10 @@ function sed_pcf_get_value( $atts ) {
 
 	extract(lAtts(array(
 		'custom'	=> '',
-		'section'	=> '', 
+		'section'	=> '',
 		'variable'  => '',
 		'default'	=> NULL,
-	),$atts));	
+	),$atts));
 
 	$result = $default;
 	$vars = @$thisarticle[$custom];
@@ -251,7 +251,7 @@ function sed_pcf_if_value( $atts , $thing='' ) {
 	//
 	extract(lAtts(array(
 		'custom'	=> '',
-		'section'	=> '', 
+		'section'	=> '',
 		'variable'  => '',
 		'val' => NULL,
 	),$atts));
@@ -274,8 +274,8 @@ function sed_pcf_if_field_section( $atts , $thing='' ) {
 
 	extract(lAtts(array(
 		'custom'	=> '',
-		'section'	=> '', 
-	),$atts));	
+		'section'	=> '',
+	),$atts));
 
 	$cond = false;
 	$vars = @$thisarticle[$custom];
@@ -296,7 +296,7 @@ function sed_pcf_thumbnail( $atts ) {
 	$atts['txp_fn'] = 'thumbnail';
 	return _sed_pcf_txp_fn( $atts );
 	}
-	
+
 function sed_pcf_email( $atts ) {
 	$atts['txp_fn'] = 'email';
 	return _sed_pcf_txp_fn( $atts );
