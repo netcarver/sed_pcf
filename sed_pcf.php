@@ -18,10 +18,12 @@ $plugin['type'] = 1;
 
 # ================== PRIVATE FUNCTIONS FOLLOW ===================
 
-function _sed_parse_section_vars( $vars ) {
+function _sed_parse_section_vars( $vars ) 
+	{
 	$result = array();
 
-	if( is_array($vars) and count($vars) ) {
+	if( is_array($vars) and count($vars) ) 
+		{
 		foreach( $vars as $k=>$v )
 			$result[$k] = parse($v);
 		}
@@ -29,7 +31,8 @@ function _sed_parse_section_vars( $vars ) {
 	return $result;
 	}
 
-function _sed_pcf_txp_fn($atts) {
+function _sed_pcf_txp_fn($atts) 
+	{
 	#
 	#	Generic callback switch. Takes the array it builds from the named section of a custom field and calls a function with the
 	# array as an argument. Useful for calling back into the TXP core.
@@ -56,12 +59,14 @@ function _sed_pcf_txp_fn($atts) {
 		function_exists($txp_fn) and
 		!empty($vars) and
 		!empty($section)
-		) {
+		) 
+		{
 		if( 'none' === $section )
 			$vars = sed_lib_extract_name_value_pairs( $vars );
 		else
 			$vars = sed_lib_extract_packed_variable_section( $section , $vars );
-		if( is_array( $vars ) ) {
+		if( is_array( $vars ) ) 
+			{
 			if( $parse )
 				$vars = _sed_parse_section_vars( $vars );
 			$result = @$txp_fn( $vars );
@@ -72,7 +77,8 @@ function _sed_pcf_txp_fn($atts) {
 
 # ================== CLIENT-SIDE TAGS FOLLOW ===================
 
-function sed_pcf_get_value( $atts ) {
+function sed_pcf_get_value( $atts ) 
+	{
 	#
 	#	Returns the value of the named variable in the named section of the named custom field (if any) else returns the default value (NULL).
 	#
@@ -87,19 +93,22 @@ function sed_pcf_get_value( $atts ) {
 
 	$result = $default;
 	$vars = @$thisarticle[$custom];
-	if( !empty( $vars ) and !empty($section) and !empty($variable) ) {
+	if( !empty( $vars ) and !empty($section) and !empty($variable) ) 
+		{
 		if( 'none' === $section )
 			$vars = sed_lib_extract_name_value_pairs( $vars );
 		else
 			$vars = sed_lib_extract_packed_variable_section( $section , $vars );
-		if( is_array( $vars ) ) {
+		if( is_array( $vars ) ) 
+			{
 			$result = @$vars[$variable];
 			}
 		}
 	return $result;
 	}
 
-function sed_pcf_if_value( $atts , $thing='' ) {
+function sed_pcf_if_value( $atts , $thing='' ) 
+	{
 	#
 	#	Tests to see if there is a value to the named variable in the named section of the named custom field.
 	#
@@ -120,7 +129,8 @@ function sed_pcf_if_value( $atts , $thing='' ) {
 	return parse(EvalElse($thing, $cond));
 	}
 
-function sed_pcf_if_field_section( $atts , $thing='' ) {
+function sed_pcf_if_field_section( $atts , $thing='' ) 
+	{
 	#
 	#	Tests to see if there is a named section of the named custom field.
 	#
@@ -133,7 +143,8 @@ function sed_pcf_if_field_section( $atts , $thing='' ) {
 
 	$cond = false;
 	$vars = @$thisarticle[$custom];
-	if( !empty( $vars ) and !empty($section) ) {
+	if( !empty( $vars ) and !empty($section) ) 
+		{
 		$vars = sed_lib_extract_packed_variable_section( $section , $vars );
 		$cond = is_array( $vars );
 		}
@@ -141,17 +152,20 @@ function sed_pcf_if_field_section( $atts , $thing='' ) {
 	return parse(EvalElse($thing, $cond));
 	}
 
-function sed_pcf_image( $atts ) {
+function sed_pcf_image( $atts ) 
+	{
 	$atts['txp_fn'] = 'image';
 	return _sed_pcf_txp_fn( $atts );
 	}
 
-function sed_pcf_thumbnail( $atts ) {
+function sed_pcf_thumbnail( $atts ) 
+	{
 	$atts['txp_fn'] = 'thumbnail';
 	return _sed_pcf_txp_fn( $atts );
 	}
 
-function sed_pcf_email( $atts ) {
+function sed_pcf_email( $atts ) 
+	{
 	$atts['txp_fn'] = 'email';
 	return _sed_pcf_txp_fn( $atts );
 	}
