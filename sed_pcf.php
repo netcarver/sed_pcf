@@ -1,20 +1,6 @@
 <?php
-/*$HeadURL$*/
-
-$plugin['revision'] = '$LastChangedRevision$';
-
-$revision = @$plugin['revision'];
-if( !empty( $revision ) )
-	{
-	$parts = explode( ' ' , trim( $revision , '$' ) );
-	$revision = $parts[1];
-	if( !empty( $revision ) )
-		$revision = '.' . $revision;
-	}
-
-
 $plugin['name'] = 'sed_packed_custom_fields';
-$plugin['version'] = '0.3' . $revision;
+$plugin['version'] = '0.3';
 $plugin['author'] = 'Netcarver';
 $plugin['author_uri'] = 'http://txp-plugins.netcarving.com';
 $plugin['description'] = 'Allows packing of multiple values into one custom field.';
