@@ -10,13 +10,13 @@ $plugin['type'] = 1;
 
 # --- BEGIN PLUGIN CODE ---
 
-// ================== IMMEDIATE CODE & DECLARATIONS FOLLOW ===================
-//
-//	This plugin requires the services of my plugin library to allow it to pull apart packed variables from the custom fields.
-//
+# ================== IMMEDIATE CODE & DECLARATIONS FOLLOW ===================
+#
+#	This plugin requires the services of my plugin library to allow it to pull apart packed variables from the custom fields.
+#
 @require_plugin('sed_plugin_library');
 
-// ================== PRIVATE FUNCTIONS FOLLOW ===================
+# ================== PRIVATE FUNCTIONS FOLLOW ===================
 
 function _sed_parse_section_vars( $vars ) {
 	$result = array();
@@ -30,10 +30,10 @@ function _sed_parse_section_vars( $vars ) {
 	}
 
 function _sed_pcf_txp_fn($atts) {
-	//
-	//	Generic callback switch. Takes the array it builds from the named section of a custom field and calls a function with the
-	// array as an argument. Useful for calling back into the TXP core.
-	//
+	#
+	#	Generic callback switch. Takes the array it builds from the named section of a custom field and calls a function with the
+	# array as an argument. Useful for calling back into the TXP core.
+	#
 	global $thisarticle;
 	$permitted = array( 'email', 'image', 'thumbnail' );
 
@@ -70,12 +70,12 @@ function _sed_pcf_txp_fn($atts) {
 	return $result;
 	}
 
-// ================== CLIENT-SIDE TAGS FOLLOW ===================
+# ================== CLIENT-SIDE TAGS FOLLOW ===================
 
 function sed_pcf_get_value( $atts ) {
-	//
-	//	Returns the value of the named variable in the named section of the named custom field (if any) else returns the default value (NULL).
-	//
+	#
+	#	Returns the value of the named variable in the named section of the named custom field (if any) else returns the default value (NULL).
+	#
 	global $thisarticle;
 
 	extract(lAtts(array(
@@ -100,9 +100,9 @@ function sed_pcf_get_value( $atts ) {
 	}
 
 function sed_pcf_if_value( $atts , $thing='' ) {
-	//
-	//	Tests to see if there is a value to the named variable in the named section of the named custom field.
-	//
+	#
+	#	Tests to see if there is a value to the named variable in the named section of the named custom field.
+	#
 	extract(lAtts(array(
 		'custom'	=> '',
 		'section'	=> '',
@@ -121,9 +121,9 @@ function sed_pcf_if_value( $atts , $thing='' ) {
 	}
 
 function sed_pcf_if_field_section( $atts , $thing='' ) {
-	//
-	//	Tests to see if there is a named section of the named custom field.
-	//
+	#
+	#	Tests to see if there is a named section of the named custom field.
+	#
 	global $thisarticle;
 
 	extract(lAtts(array(
