@@ -165,10 +165,11 @@ function sed_pcf_for_each_value( $atts , $thing )
 	$def_custom_name = 'custom1';
 	extract( $merged = lAtts( array(
 		'debug'		=> 0,
-		'name'	=> $def_custom_name,
+		'name'		=> $def_custom_name,
+		'id'		=> '',
 		'form'  	=> '',
 		'label'  	=> '',
-		'labeltag'  => '',
+		'labeltag'	=> '',
 		'wraptag'	=> 'ul',
 		'break'		=> 'li',
 		'class'		=> '',
@@ -199,7 +200,7 @@ function sed_pcf_for_each_value( $atts , $thing )
 		$out[] = parse( str_replace( '{value}' , $value , $thing ) );
 		}
 
-	return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class);
+	return doLabel($label, $labeltag).doWrap($out, $wraptag, $break, $class , '', '', '', $id );
 	}
 # --- END PLUGIN CODE ---
 /*
