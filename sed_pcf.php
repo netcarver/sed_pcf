@@ -312,6 +312,7 @@ This can be used as an enclosing tag, or with a form, or as a single tag. It was
 | 'wraptag'      | 'ul'            | Optional | Tag to wrap the whole output in -- you might want to set this to '' if using a form. |
 | 'break'        | 'li'            | Optional | Tag to wrap each individual value's output in -- again, you may want to set this to '' if your form wraps the output. |
 | 'class'        | 'custom1'       | Optional | Class to apply to the wrapped output |
+| 'id'           | ''              | Optional | CSS id to apply to the wraptag |
 
 This tag can be used in three ways...
 
